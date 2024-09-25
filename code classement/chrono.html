@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C'est parti !</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kallisto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #5b857b;
+            font-family: 'Kallisto', sans-serif;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        .input-container select, .input-container button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .input-container select {
+            background-color: white;
+            color: #5b857b;
+        }
+        .input-container button {
+            background-color: #f6a499;
+            color: #5b857b;
+            transition: background-color 0.3s;
+        }
+        .input-container button:hover {
+            background-color: #ea5736;
+        }
+        .timer {
+            font-size: 60px;
+            margin: 20px 0;
+            color: #fee799;
+            letter-spacing: 2px;
+        }
+        .rank-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px auto;
+            width: 80%;
+            background-color: #f6a499;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .rank-item {
+            background-color: white;
+            color: #5b857b;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            font-size: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .gold-medal {
+            color: #ffd700;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>C'est parti !</h1>
+    
+    <div class="input-container">
+        <select id="playerSelect">
+            <option value="" disabled selected>Choisir un joueur</option>
+        </select>
+        <button onclick="startTimer()">GO !</button>
+        <button onclick="stopTimer()">Stop</button>
+    </div>
+    
+    <div class="timer" id="timer">00:00:00</div>
+    
+    <h2>Classement</h2>
+    <ul class="rank-list" id="rankList"></ul>
+
+    <script>
+        let players = JSON.parse(localStorage.getItem('players')) || [];
+        let selectedPlayer = null;
+        let startTime, interval;
+
+        // Remplir la liste déroulante avec les joueurs enregistrés
+        const playerSelect = document.getElementById('playerSelect');
+        players.forEach(player => {
+            const option = document.createElement('option');
+            option.value = player.name;
+            option.textContent = player.name;
+            playerSelect.appendChild(option);
+        });
+
+        function startTimer() {
+            if (!playerSelect.value) return alert("Veuillez sélectionner un joueur");
+            
+            selectedPlayer = players.find(p => p.name === playerSelect.value);
+            if (!selectedPlayer) return alert("Joueur non trouvé");
+
+            startTime = Date.now();
+            clearInterval(interval); // Clear any previous interval
+            interval = setInterval(updateTimer, 10); // Update every 10ms for centiseconds
+        }
+
+        function updateTimer() {
+            const elapsed = Date.now() - startTime;
+            const centiseconds = Math.floor((elapsed / 10) % 100);
+            const seconds = Math.floor((elapsed / 1000) % 60);
+            const minutes = Math.floor((elapsed / (1000 * 60)) % 60);
+            const hours = Math.floor((elapsed / (1000 * 60 * 60)) % 24);
+
+            document.getElementById('timer').textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(centiseconds).padStart(2, '0')}`;
+        }
+
+        function stopTimer() {
+            clearInterval(interval);
+            
+            const elapsed = (Date.now() - startTime) / 1000;
+            selectedPlayer.time = elapsed;
+            
+            players = players.map(player => player.name === selectedPlayer.name ? selectedPlayer : player);
+            localStorage.setItem('players', JSON.stringify(players));
+            
+            updateRanking();
+        }
+
+        function updateRanking() {
+            players.sort((a, b) => b.time - a.time); // Sorting in descending order
+            
+            const rankList = document.getElementById('rankList');
+            rankList.innerHTML = '';
+
+            players.forEach((player, index) => {
+                const li = document.createElement('li');
+                li.className = 'rank-item';
+
+                if (index === 0) {
+                    li.innerHTML = `<span class="gold-medal">🥇</span> <strong>${index + 1}. ${player.name}</strong>: ${player.time.toFixed(2)} s`;
+                } else {
+                    li.innerHTML = `<strong>${index + 1}. ${player.name}</strong>: ${player.time.toFixed(2)} s`;
+                }
+
+                rankList.appendChild(li);
+            });
+        }
+        
+        updateRanking();
+    </script>
+</body>
+</html>
