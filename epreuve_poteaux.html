@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Épreuve des Poteaux</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kallisto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #5b857b; /* Vert d'eau foncé */
+            font-family: 'Kallisto', sans-serif;
+            color: #fee799; /* Jaune crème */
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 900; /* Heavy */
+            margin-bottom: 20px;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        .input-container input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        .go-button {
+            background-color: #ea5736; /* Rouge orangé */
+            color: #fee799; /* Jaune crème */
+            border: none;
+            padding: 15px 30px;
+            font-size: 24px;
+            font-weight: 700;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        .go-button:hover {
+            background-color: #f6a499; /* Rouge orangé clair */
+        }
+    </style>
+</head>
+<body>
+    <h1>Épreuve des Poteaux</h1>
+    <div class="input-container">
+        <input type="text" id="playerName" placeholder="Nom du joueur" />
+        <button onclick="addPlayer()">Ajouter</button>
+    </div>
+    <ul id="playerList" style="list-style: none; padding: 0;"></ul>
+    
+    <button class="go-button" onclick="goToChronometerPage()">GO !</button>
+
+    <script>
+        const players = [];
+
+        function addPlayer() {
+            const playerNameInput = document.getElementById('playerName');
+            const playerName = playerNameInput.value.trim();
+
+            if (playerName) {
+                players.push({ name: playerName, time: null });
+                const playerList = document.getElementById('playerList');
+                const li = document.createElement('li');
+                li.textContent = playerName;
+                playerList.appendChild(li);
+                playerNameInput.value = '';
+            }
+        }
+
+        function goToChronometerPage() {
+            localStorage.setItem('players', JSON.stringify(players));
+            window.location.href = 'chrono.html';
+        }
+    </script>
+</body>
+</html>

@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Kallisto&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #c13633;
+            background-color: #5b857b; /* Vert d'eau foncé */
             font-family: 'Kallisto', sans-serif;
-            color: white;
+            color: #fee799; /* Jaune crème */
             text-align: center;
             padding: 20px;
         }
@@ -19,26 +19,18 @@
             font-style: italic;
             text-transform: uppercase;
             margin-bottom: 20px;
+            color: #f6a499; /* Rouge orangé clair */
         }
         .line {
             width: 100%;
             height: 3px;
-            background-color: white;
+            background-color: #5b857b; /* Vert d'eau foncé */
             margin: 10px 0;
             position: relative;
         }
-        .line:nth-child(1) {
-            left: 25%;
-        }
-        .line:nth-child(2) {
-            left: 15%;
-        }
-        .line:nth-child(3) {
-            left: 5%;
-        }
         .button {
-            background-color: #60aa55;
-            color: white;
+            background-color: #f6a499; /* Rouge orangé clair */
+            color: #5b857b; /* Vert d'eau foncé */
             border: none;
             padding: 15px 30px;
             font-size: 24px;
@@ -47,17 +39,21 @@
             cursor: pointer;
             margin-top: 20px;
             transition: background-color 0.3s;
+            border-radius: 5px;
         }
         .button:hover {
-            background-color: #4e9541;
+            background-color: #ea5736; /* Rouge orangé */
         }
     </style>
 </head>
 <body>
-    <h1>Basketball</h1>
+    <h1>Classement Sportif</h1>
     <div class="line"></div>
     <div class="line"></div>
     <div class="line"></div>
-    <button class="button" onclick="window.location.href='classement.html'">démarre ton classement ici !</button>
+    
+    <button class="button" onclick="window.location.href='epreuve_poteaux.html'">Épreuve des poteaux</button>
+    <button class="button" onclick="window.location.href='limbo.html'">Limbo</button>
+    <button class="button" onclick="window.location.href='basket.html'">Basket</button>
 </body>
 </html>
